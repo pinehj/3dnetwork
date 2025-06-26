@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     private CharacterController _controller;
-
+    private Animator _animator;
     [SerializeField] private float _moveSpeed;
     private float _horizontalMoveInput;
     private float _verticalMoveInput;
@@ -14,6 +14,7 @@ public class PlayerMove : MonoBehaviour
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
     }
     private void Update()
     {
@@ -23,6 +24,7 @@ public class PlayerMove : MonoBehaviour
         Vector3 moveDirection = new Vector3(_horizontalMoveInput, 0, _verticalMoveInput).normalized;
         moveDirection = transform.TransformDirection(moveDirection);
 
+        _animator.SetFloat("Move", moveDirection.magnitude);
         //transform.forward = Vector3.Lerp(transform.forward, moveDirection, 0.05f);
         if (_controller.isGrounded)
         {
