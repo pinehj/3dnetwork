@@ -1,15 +1,22 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEngine.UI.GridLayoutGroup;
 
-public class PlayerNickName : PlayerAbility
+public class UI_Player : MonoBehaviour
 {
     public TextMeshProUGUI NickNameTextUI;
-
+    public Slider HealthSlider;
     private void Start()
     {
-        NickNameTextUI.text = $"{_owner.PhotonView.Owner.NickName}_{_owner.PhotonView.OwnerActorNr}";
+        GameManager.Instance.OnInit += Init;
+    }
+    private void Init()
+    {
+        Player player = GameManager.Instance.Player;
+        NickNameTextUI.text = $"{player.PhotonView.Owner.NickName}_{player.PhotonView.OwnerActorNr}";
 
-        if (!_owner.PhotonView.IsMine)
+        if (!player.PhotonView.IsMine)
         {
             NickNameTextUI.color = Color.red;
         }

@@ -4,13 +4,12 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_HUD : Singleton<UI_HUD>
+public class UI_HUD : MonoBehaviour
 {
     public Slider StaminaSlider;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         GameManager.Instance.OnInit += Init;
     }
     public void Init()
