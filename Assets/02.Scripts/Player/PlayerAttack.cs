@@ -10,8 +10,11 @@ public class PlayerAttack : PlayerAbility
     }
     void Update()
     {
-        
-        if (_attackTimer <= 0 && Input.GetMouseButtonDown(0))
+        if (!_owner.PhotonView.IsMine)
+        {
+            return;
+        }
+        if (_attackTimer <= 0 && Input.GetMouseButton(0) && _owner.GetAbility<PlayerStamina>().TryConsumeStamina(_owner.Stat.AttackStaminaCost))
         {
             _attackTimer = 1 / _owner.Stat.AttackSpeed;
             int randomAttackIndex = Random.Range(1, 4);

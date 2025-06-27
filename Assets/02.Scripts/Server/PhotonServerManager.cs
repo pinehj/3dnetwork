@@ -16,6 +16,9 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         // 설정
+        // 0. 데이터 송수신 빈도 매 초당 60회(기본은 10)
+        PhotonNetwork.SendRate = 60;
+        PhotonNetwork.SerializationRate = 60;
         // 1. 버전 : 버전이 다르면 다른 서버로 접속이 된다.
         PhotonNetwork.GameVersion = _gameVersion;
         // 2. 닉네임 : 게임에서 사용할 사용자의 별명(중복 가능 -> 판별을 위해서는 ActorID)
@@ -76,6 +79,10 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
             // 진짜 고유 아이디
             Debug.Log(player.Value.UserId); // 친구 기능, 귓속말 등등에 쓰이지만... 플젝때 알아서쓰세요.
         }
+
+        // 방에 입장 완료가 되면 플레이어를 생성한다.
+        // 포톤에서는 게임 오브젝트 생성 후 포톤 서버에 등록을 해야 한다.
+        PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
     }
 
     // 랜덤 방 입장에 실패하면 호출되는 함수

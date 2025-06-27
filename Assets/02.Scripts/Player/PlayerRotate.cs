@@ -1,6 +1,7 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
-public class PlayerRotation : PlayerAbility
+public class PlayerRotate : PlayerAbility
 {
     // 목표: 마우스를 조작하면 카메라를 그 방향으로 회전시키고 싶다.
     [SerializeField] private Transform _cameraRoot;
@@ -8,9 +9,23 @@ public class PlayerRotation : PlayerAbility
     private float _horizontalMouseMove;
     private float _verticalMouseMove;
 
+    private void Start()
+    {
+        if (!_owner.PhotonView.IsMine)
+        {
+            return;
+        }
+        Cursor.lockState = CursorLockMode.Locked;
 
+        CinemachineCamera camera = GameObject.FindWithTag("FollowCamera").GetComponent<CinemachineCamera>();
+        camera.Follow = _cameraRoot;
+    }
     private void Update()
     {
+        if (!_owner.PhotonView.IsMine)
+        {
+            return;
+        }
         // 1. 마우스 입력 받기
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
