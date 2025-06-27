@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 public class PlayerStamina : PlayerAbility
 {
+    public event Action<float, float> OnDataChanged;
     [SerializeField] private float _currentStamina;
     public float CurrentStamina
     {
@@ -11,7 +13,8 @@ public class PlayerStamina : PlayerAbility
         }
         set
         {
-            _currentStamina = Mathf.Clamp(value, 0, _owner.Stat.MaxStamina); 
+            _currentStamina = Mathf.Clamp(value, 0, _owner.Stat.MaxStamina);
+            OnDataChanged?.Invoke(_currentStamina, _owner.Stat.MaxStamina);
         }
     }
 
@@ -21,7 +24,6 @@ public class PlayerStamina : PlayerAbility
     }
     private void Update()
     {
-        Debug.Log(_currentStamina);
         if (!_owner.State.IsRunning && !_owner.State.IsJumping)
         {
             CurrentStamina += _owner.Stat.StaminaRegen * Time.deltaTime;

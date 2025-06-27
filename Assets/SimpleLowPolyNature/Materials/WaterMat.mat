@@ -46,7 +46,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _WaterNormal:
         m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Scale: {x: 2, y: 2}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
         m_Texture: {fileID: 0}
@@ -74,26 +74,26 @@ Material:
     - Vector1_6f56a0970372485390c6587863c2374e: -2.5
     - Vector1_7273530c27a34c9f8ee5723b84f96baa: 0.3
     - Vector1_dada42ebfac44076897b6de67441ba32: 0.3
-    - _Distortion: 0.5
-    - _FoamDepth: 0
-    - _FoamFalloff: 0
-    - _FoamSmoothness: 0
-    - _FoamSpecular: 0
+    - _Distortion: 0.2
+    - _FoamDepth: 0.3
+    - _FoamFalloff: -50
+    - _FoamSmoothness: 0.3
+    - _FoamSpecular: 0.3
     - _NormalScale: 0
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaterDepth: 0
-    - _WaterFalloff: 0
-    - _WaterSmoothness: 0
-    - _WaterSpecular: 0
-    - _WavesAmount: 8.87
+    - _WaterDepth: 0.99
+    - _WaterFalloff: -10
+    - _WaterSmoothness: 0.3
+    - _WaterSpecular: 0.3
+    - _WavesAmount: 8
     - _WavesAmplitude: 0.01
     - __dirty: 1
     m_Colors:
     - Color_36218622185947c6a5ae36366d8e21d8: {r: 0.23673905, g: 0.3217783, b: 0.5283019, a: 0.9607843}
     - Color_93e06cd551a5449091bcde90b46765a0: {r: 0.5790762, g: 0.6688198, b: 0.7264151, a: 0.19607843}
     - Vector2_4351ac2be1d74054986ec5378db9d578: {r: 1, g: 1, b: 0, a: 0}
-    - _DeepColor: {r: 1, g: 1, b: 1, a: 0}
+    - _DeepColor: {r: 0.43632072, g: 0.7690704, b: 0.8726415, a: 1}
     - _ShalowColor: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
