@@ -8,19 +8,17 @@ public class UI_HUD : Singleton<UI_HUD>
 {
     public Slider StaminaSlider;
 
+    protected override void Start()
+    {
+        base.Start();
+        GameManager.Instance.OnInit += Init;
+    }
     public void Init()
     {
-        // GameManager로?
-        List<Player> players = FindObjectsByType<Player>(FindObjectsSortMode.None).Where(player => player.PhotonView.IsMine).ToList();
-        foreach(Player player in players)
-        {
-            player.GetAbility<PlayerStamina>().OnDataChanged += UpdateStaminaUI;
-            break;
-        }
+        GameManager.Instance.Player.GetAbility<PlayerStamina>().OnDataChanged += UpdateStaminaUI;
     }
     public void UpdateStaminaUI(float value, float maxValue)
     {
-        Debug.Log("s");
         StaminaSlider.maxValue = maxValue;
         StaminaSlider.value = value;
     }

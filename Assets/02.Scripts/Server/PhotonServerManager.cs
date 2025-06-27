@@ -82,9 +82,9 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
 
         // 방에 입장 완료가 되면 플레이어를 생성한다.
         // 포톤에서는 게임 오브젝트 생성 후 포톤 서버에 등록을 해야 한다.
-        PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+        Player user = PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity).GetComponent<Player>();
 
-        UI_HUD.Instance.Init();
+        GameManager.Instance.Init();
     }
 
     // 랜덤 방 입장에 실패하면 호출되는 함수
