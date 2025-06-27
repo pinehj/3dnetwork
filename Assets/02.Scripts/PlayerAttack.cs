@@ -1,27 +1,21 @@
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerAttack : PlayerAbility
 {
-    [SerializeField] private float _attackCoolTime;
-    private float _attackTimer;
-    private Animator _animator;
+    private float _attackTimer = 0;
 
-    private void Awake()
+    protected override void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
-    }
-    private void Start()
-    {
-        _attackTimer = _attackCoolTime;
+        base.Awake();
     }
     void Update()
     {
         
         if (_attackTimer <= 0 && Input.GetMouseButtonDown(0))
         {
-            _attackTimer = _attackCoolTime;
+            _attackTimer = 1 / _owner.Stat.AttackSpeed;
             int randomAttackIndex = Random.Range(1, 4);
-            _animator.SetTrigger($"Attack{randomAttackIndex}");
+            _owner.Animator.SetTrigger($"Attack{randomAttackIndex}");
         }
         else
         {
