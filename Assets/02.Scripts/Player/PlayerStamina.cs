@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerStamina : PlayerAbility
 {
-    public event Action<float, float> OnDataChanged;
+    public event Action<float> OnDataChanged;
     [SerializeField] private float _currentStamina;
     public float CurrentStamina
     {
@@ -14,7 +14,7 @@ public class PlayerStamina : PlayerAbility
         set
         {
             _currentStamina = Mathf.Clamp(value, 0, _owner.Stat.MaxStamina);
-            OnDataChanged?.Invoke(_currentStamina, _owner.Stat.MaxStamina);
+            OnDataChanged?.Invoke(_currentStamina / _owner.Stat.MaxStamina);
         }
     }
 

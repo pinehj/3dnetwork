@@ -5,23 +5,25 @@ using UnityEngine;
 
 public class PlayerMove : PlayerAbility, IPunObservable
 {
-    private CharacterController _controller;
-
     Vector3 _receivedPosition = Vector3.zero;
     Quaternion _receivedRotation = Quaternion.identity;
 
 
     [SerializeField] private float _moveSpeed;
 
-    private float _yVelocity;
-    private float _gravity = -10f;
-
-    protected override void Awake()
+    [SerializeField] private float _yVelocity;
+    public float YVelocity
     {
-        base.Awake();
-        _controller = GetComponent<CharacterController>();
+        get
+        {
+            return _yVelocity;
+        }
+        set
+        {
+            _yVelocity = Mathf.Clamp(value, -3, 99999);
+        }
     }
-
+    private float _gravity = -15f;
 
     // 데이터 동기화를 위한 데이터 전송 및 수신 기능
     // stream : 서버에서 주고받을 데이터가 담겨있는 변수
@@ -50,6 +52,10 @@ public class PlayerMove : PlayerAbility, IPunObservable
 
             return;
         }
+        if (_owner.State.IsDead)
+        {
+            return;
+        }
         float horizontalMoveInput = Input.GetAxisRaw("Horizontal");
         float verticalMoveInput = Input.GetAxisRaw("Vertical");
 
@@ -63,25 +69,26 @@ public class PlayerMove : PlayerAbility, IPunObservable
         RunAndWalk();
 
         moveDirection.y = _yVelocity;
-        _controller.Move(moveDirection * _moveSpeed * Time.deltaTime);
+        _owner.Controller.Move(moveDirection * _moveSpeed * Time.deltaTime);
     }
 
     private void JumpAndFalling()
     {
-        if (_controller.isGrounded)
+        if (_owner.Controller.isGrounded)
         {
             _owner.State.IsJumping = false;
-            _yVelocity = -.1f;
+            YVelocity = -1f;
             if (Input.GetKeyDown(KeyCode.Space) && _owner.GetAbility<PlayerStamina>().TryConsumeStamina(_owner.Stat.JumpStaminaCost))
             {
                 _owner.State.IsJumping = true;
-                _yVelocity = _owner.Stat.JumpPower;
+                YVelocity = _owner.Stat.JumpPower;
             }
         }
 
         else
         {
-            _yVelocity += _gravity * Time.deltaTime;
+            _owner.State.IsJumping = true;
+            YVelocity += _gravity * Time.deltaTime;
         }
     }
 

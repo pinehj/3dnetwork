@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class UI_HUD : MonoBehaviour
 {
     public Slider StaminaSlider;
+    public Slider HealthSlider;
 
     private void Start()
     {
@@ -15,10 +16,14 @@ public class UI_HUD : MonoBehaviour
     public void Init()
     {
         GameManager.Instance.Player.GetAbility<PlayerStamina>().OnDataChanged += UpdateStaminaUI;
+        GameManager.Instance.Player.GetAbility<PlayerHealth>().OnDataChanged += UpdateHealthUI;
     }
-    public void UpdateStaminaUI(float value, float maxValue)
+    public void UpdateStaminaUI(float value)
     {
-        StaminaSlider.maxValue = maxValue;
         StaminaSlider.value = value;
+    }
+    public void UpdateHealthUI(float value)
+    {
+        HealthSlider.value = value;
     }
 }
