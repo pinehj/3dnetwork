@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
         throw new Exception($"어빌리티 {type.Name}을 {gameObject.name}에서 찾을 수 없습니다.");
     }
 
+    [PunRPC]
     public void Respawn(Vector3 pos)
     {
         State.IsDead = false;

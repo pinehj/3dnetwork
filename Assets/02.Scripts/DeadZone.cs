@@ -7,7 +7,7 @@ public class DeadZone : MonoBehaviour
         IDamageable damagedObject = other.GetComponent<IDamageable>();
         if (damagedObject != null)
         {
-            damagedObject.TakeDamage(99999);
+            damagedObject.TakeDamage(99999, -1);
         }
     }
 }

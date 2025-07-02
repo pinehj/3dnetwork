@@ -26,6 +26,6 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator RespawnPlayer(Player player)
     {
         yield return new WaitForSeconds(5);
-        player.Respawn(_spawnPositionList[UnityEngine.Random.Range(0, _spawnPositionList.Count)].position);
+        player.PhotonView.RPC(nameof(Player.Respawn), RpcTarget.All, _spawnPositionList[UnityEngine.Random.Range(0, _spawnPositionList.Count)].position);
     }
 }
