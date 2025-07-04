@@ -16,12 +16,27 @@ public class RoomManager : MonoBehaviourPunCallbacks
     public event Action<string> OnPlayerEntered;
     public event Action<string> OnPlayerExited;
     public event Action<string, string> OnPlayerDead;
+
+    private bool _isInitialized;
     private void Awake()
     {
         _instance = this;
     }
+    private void Start()
+    {
+        if (!_isInitialized)
+        {
+            Init();
+        }
+    }
+
     public override void OnJoinedRoom()
     {
+        Init();
+    }
+    private void Init()
+    {
+        _isInitialized = true;
         GameManager.Instance.Init();
 
         SetRoom();
@@ -30,6 +45,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         OnPlayerEntered?.Invoke(PhotonNetwork.LocalPlayer.NickName + "_" + PhotonNetwork.LocalPlayer.ActorNumber);
 
     }
+
+    
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {

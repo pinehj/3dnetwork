@@ -57,9 +57,17 @@ public class ScoreManager : MonoBehaviourPunCallbacks
     {
         _instance = this;
     }
+
     public override void OnJoinedRoom()
     {
         Refresh();
+    }
+    private void Start()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            Refresh();
+        }
     }
 
 

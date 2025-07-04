@@ -5,6 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public enum EPlayerType
+{
+    Male,
+    Female
+}
 public class GameManager : Singleton<GameManager>
 {
     public Player Player { get; private set; }
@@ -18,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 
     public void Init()
     {
-        Player = PhotonNetwork.Instantiate("Player", _spawnPositionList[UnityEngine.Random.Range(0, _spawnPositionList.Count)].position, Quaternion.identity).GetComponent<Player>();
+        Player = PhotonNetwork.Instantiate($"Player{LobbyScene.PlayerType}", _spawnPositionList[UnityEngine.Random.Range(0, _spawnPositionList.Count)].position, Quaternion.identity).GetComponent<Player>();
         //Player = FindObjectsByType<Player>(FindObjectsSortMode.None).First(player => player.PhotonView.IsMine);
         OnInit?.Invoke();
 

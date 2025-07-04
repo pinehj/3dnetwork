@@ -4,15 +4,32 @@ using UnityEngine;
 // Photon API 네임스페이스
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEditor;
 
 
 // 역할: 포톤 서버 관리자(서버 연결, 로비 입장, 방 입장, 게임 입장)
 public class PhotonServerManager : MonoBehaviourPunCallbacks
 {
+    private static PhotonServerManager _instance;
+    public static PhotonServerManager Instance => _instance;
+
+    
     // MonoBehaviourPunCallbacks : 유니티 이벤트 말고도 PUN 서버 이벤트를 받을 수 있다.
     private readonly string _gameVersion = "1.0.0";
-    private string _nickname = "onhae";
 
+    private void Awake()
+    {
+        if(_instance == null)
+        {
+            _instance = this;
+
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     private void Start()
     {
         // 설정
@@ -22,7 +39,7 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
         // 1. 버전 : 버전이 다르면 다른 서버로 접속이 된다.
         PhotonNetwork.GameVersion = _gameVersion;
         // 2. 닉네임 : 게임에서 사용할 사용자의 별명(중복 가능 -> 판별을 위해서는 ActorID)
-        PhotonNetwork.NickName = _nickname;
+        //PhotonNetwork.NickName = _nickname;
 
         // 방장이 로드한 씬으로 다른 참여자가 똑같이 이동하게끔 동기화 해주는 옵션
         // 방장: 방을 만든 소유자이자 "마스터 클라이언트" (방마다 한명의 마스터 클라이언트가 존재)
@@ -59,7 +76,7 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
         Debug.Log($"InLobby: {PhotonNetwork.InLobby}"); // 로비 입장 유무
 
         // 랜덤 방에 들어간다.
-        PhotonNetwork.JoinRandomRoom();
+        //PhotonNetwork.JoinRandomRoom();
     }
 
     // 방에 입장한 후 호출되는 함수
@@ -80,8 +97,15 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
             Debug.Log(player.Value.UserId); // 친구 기능, 귓속말 등등에 쓰이지만... 플젝때 알아서쓰세요.
         }
 
+
+
         // 방에 입장 완료가 되면 플레이어를 생성한다.
         // 포톤에서는 게임 오브젝트 생성 후 포톤 서버에 등록을 해야 한다.
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("Battle");
+        }
     }
 
     // 랜덤 방 입장에 실패하면 호출되는 함수
@@ -90,14 +114,14 @@ public class PhotonServerManager : MonoBehaviourPunCallbacks
         Debug.Log($"랜덤 방 입장에 실패했습니다: {returCode} : {message}");
 
 
-        // Room 속성 정의
-        RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 20;
-        roomOptions.IsOpen = true;     // 룸 입장 가능 여부
-        roomOptions.IsVisible = true;  // 로비(채널) 룸 목록에 노출시킬지 여부
+        //// Room 속성 정의
+        //RoomOptions roomOptions = new RoomOptions();
+        //roomOptions.MaxPlayers = 20;
+        //roomOptions.IsOpen = true;     // 룸 입장 가능 여부
+        //roomOptions.IsVisible = true;  // 로비(채널) 룸 목록에 노출시킬지 여부
 
-        // Room 생성
-        PhotonNetwork.CreateRoom("test", roomOptions);
+        //// Room 생성
+        //PhotonNetwork.CreateRoom("test", roomOptions);
     }
 
     // 룸 생성에 실패했을때 호출되는 함수
