@@ -20,10 +20,12 @@ public class ItemObject : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Player player = other.GetComponent<Player>();
-            if (player.State.IsDead)
+            if (!player.PhotonView.IsMine || player.State.IsDead)
             {
                 return;
             }
+
+            Debug.Log("xxxx");
             ScoreManager.Instance.Score += 10;
 
             ItemObjectFactory.Instance.RequestDelete(_photonView.ViewID);

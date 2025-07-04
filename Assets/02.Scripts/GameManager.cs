@@ -21,6 +21,12 @@ public class GameManager : Singleton<GameManager>
         Player = PhotonNetwork.Instantiate("Player", _spawnPositionList[UnityEngine.Random.Range(0, _spawnPositionList.Count)].position, Quaternion.identity).GetComponent<Player>();
         //Player = FindObjectsByType<Player>(FindObjectsSortMode.None).First(player => player.PhotonView.IsMine);
         OnInit?.Invoke();
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.Instantiate("Bear", Vector3.zero, Quaternion.identity);
+        }
+
     }
 
     public IEnumerator RespawnPlayer(Player player)

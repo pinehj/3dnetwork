@@ -48,7 +48,10 @@ public class RoomManager : MonoBehaviourPunCallbacks
         string deadNickname = _room.Players[actorNumber].NickName + "_" + _room.Players[actorNumber].ActorNumber;
     
         string attackerNickname = (otherActorNumber>0)?_room.Players[otherActorNumber].NickName + "_" + _room.Players[otherActorNumber].ActorNumber : deadNickname;
-
+        if(otherActorNumber == -999)
+        {
+            attackerNickname = "Bear";
+        }
         OnPlayerDead?.Invoke(deadNickname, attackerNickname);
     }
     private void SetRoom()

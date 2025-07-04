@@ -53,11 +53,9 @@ public class Player : MonoBehaviour
         State.IsDead = false;
         if (!PhotonView.IsMine)
         {
+            Controller.enabled = true;
             return;
         }
-
-        Controller.enabled = false;
-
         State.IsRunning = false;
         State.IsJumping = false;
 
@@ -77,5 +75,12 @@ public class Player : MonoBehaviour
     {
         Debug.Log("respawntrigger");
         Animator.SetTrigger("Respawn");
+    }
+
+
+    [PunRPC]
+    public void RequestAddKillCount()
+    {
+        ScoreManager.Instance.KillCount++;
     }
 }

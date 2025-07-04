@@ -23,18 +23,6 @@ public class PlayerHealth : PlayerAbility, IDamageable, IPunObservable
                 return;
             }
             Die();
-            RoomManager.Instance.OnPlayerDeath(_owner.PhotonView.Owner.ActorNumber, _lastAttackerNumber);
-            _lastAttackerNumber = -1;
-
-            if (!PhotonNetwork.IsMasterClient)
-            {
-                return;
-            }
-            for (int i = 0; i < 2; ++i)
-            {
-                ItemObjectFactory.Instance.RequestCreate(EItemType.Score, _owner.transform.position);
-            }
-
         }
     }
     private int _lastAttackerNumber = -1;
@@ -51,7 +39,7 @@ public class PlayerHealth : PlayerAbility, IDamageable, IPunObservable
     [PunRPC]
     public void TakeDamage(float damage, int actorNumber)
     {
-        if (_owner.State.IsDead )
+        if (_owner.State.IsDead)
         {
             return;
         }
@@ -70,12 +58,53 @@ public class PlayerHealth : PlayerAbility, IDamageable, IPunObservable
     {
         _owner.State.IsDead = true;
         _owner.Animator.SetTrigger("Die");
+        _owner.Controller.enabled = false;
 
-        if (!_owner.PhotonView.IsMine)
+        if (_owner.PhotonView.IsMine)
         {
-            return;
+            GameManager.Instance.StartCoroutine("RespawnPlayer", _owner);
+            var actorPlayer = PhotonNetwork.CurrentRoom.GetPlayer(_lastAttackerNumber);
+            _owner.PhotonView.RPC(nameof(Player.RequestAddKillCount), actorPlayer);
+
         }
-        GameManager.Instance.StartCoroutine("RespawnPlayer", _owner);
+
+        RoomManager.Instance.OnPlayerDeath(_owner.PhotonView.Owner.ActorNumber, _lastAttackerNumber);
+        _lastAttackerNumber = -1;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            DropItem();
+
+            
+        }
+    }
+
+    public void DropItem()
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            float randomValue = UnityEngine.Random.value;
+            float probCalc = 0;
+
+            probCalc += 0.5f;
+            if (randomValue <= probCalc)
+            {
+                ItemObjectFactory.Instance.RequestCreate(EItemType.Score, _owner.transform.position);
+                continue;
+            }
+            probCalc += 0.3f;
+            if (randomValue <= probCalc)
+            {
+                ItemObjectFactory.Instance.RequestCreate(EItemType.Stamina, _owner.transform.position);
+                continue;
+            }
+            probCalc += 0.2f;
+            if (randomValue <= probCalc)
+            {
+                ItemObjectFactory.Instance.RequestCreate(EItemType.Health, _owner.transform.position);
+                continue;
+            }
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -89,5 +118,15 @@ public class PlayerHealth : PlayerAbility, IDamageable, IPunObservable
             Debug.Log("reading");
             CurrentHealth = (float)stream.ReceiveNext();
         }
+    }
+
+    public bool CanDamage()
+    {
+        return !_owner.State.IsDead;
+    }
+
+    public Vector3 GetPos()
+    {
+        return _owner.transform.position;
     }
 }

@@ -5,6 +5,8 @@ using UnityEngine.UIElements;
 public enum EItemType
 {
     Score,
+    Stamina,
+    Health
 }
 
 [RequireComponent(typeof(PhotonView))]
@@ -50,6 +52,10 @@ public class ItemObjectFactory : MonoBehaviourPun
     [PunRPC]
     private void Delete(int viewID)
     {
-        PhotonNetwork.Destroy(PhotonView.Find(viewID).gameObject);
+        PhotonView deleteTarget = PhotonView.Find(viewID);
+        if (deleteTarget != null)
+        {
+            PhotonNetwork.Destroy(deleteTarget);
+        }
     }
 }
