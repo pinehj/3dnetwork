@@ -15,7 +15,7 @@ public class PlayerRotate : PlayerAbility
         {
             return;
         }
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         CinemachineCamera camera = GameObject.FindWithTag("FollowCamera").GetComponent<CinemachineCamera>();
         camera.Follow = _cameraRoot;
